@@ -42,7 +42,6 @@ import datetime
 import argparse
 import parse_jtl
 import calc_statistics
-import time
 import print_to_pdf
 import print_to_xls
 import plotgraphs

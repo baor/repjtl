@@ -1,9 +1,9 @@
 import datetime
 import os
-import sys
-from wfpdf.wfpdf import WFPDF
 
-PATH_TO_WFPDF = "./wfpdf"
+from wfpdf import WFPDF
+
+PATH_TO_WFPDF = "."
 REPORTNAME = "rep_%s_%s.%s"
 
 PDF_PAGE_WIDTH = 1500
