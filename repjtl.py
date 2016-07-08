@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 '''
 
 example:
@@ -84,7 +82,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if len(args.files) == 1:
-        etree_from_file = etree.iterparse(args.files[0], tag=('testResults'))
+        etree_from_file = etree.iterparse(args.files[0], tag=('testResults'), encoding='utf-8')
         labels, thread_groups = parse_jtl.parse_tree_into_labels_and_threads_dict(etree_from_file, args.trc_only)
         table_new = calc_statistics.calculate_values_to_table_and_errors(labels)
 
@@ -94,9 +92,9 @@ if __name__ == '__main__':
             count_of_png = plotgraphs.generate_graphs_for_threads(thread_groups)
             count_of_png = plotgraphs.generate_graphs_for_labels_and_threads(labels, thread_groups, count_of_png)
 
-        if args.host is None:
-            print_to_pdf.print_result_to_pdf_1_file(table_new, parse_jtl.get_errors_from_labels(labels), args.files[0], count_of_png)
-            print_to_xls.print_result_to_xlsx_1_file(table_new, parse_jtl.get_errors_from_labels(labels), args.files[0], count_of_png)
+
+        print_to_pdf.print_result_to_pdf_1_file(table_new, parse_jtl.get_errors_from_labels(labels), args.files[0], count_of_png)
+        print_to_xls.print_result_to_xlsx_1_file(table_new, parse_jtl.get_errors_from_labels(labels), args.files[0], count_of_png)
 
     elif len(args.files) == 2:
         labels_new, thread_groups = parse_jtl.parse_tree_into_labels_and_threads_dict(etree.iterparse(args.files[0], tag=('testResults')))

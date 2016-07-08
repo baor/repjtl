@@ -1,15 +1,9 @@
-# -*- coding: utf-8 -*-
-
 import datetime
 import os
 import sys
 from wfpdf.wfpdf import WFPDF
 
-SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
-PATH_TO_WFPDF = SCRIPT_PATH + "/../wfpdf"
-sys.path.append(PATH_TO_WFPDF)
-
-
+PATH_TO_WFPDF = "./wfpdf"
 REPORTNAME = "rep_%s_%s.%s"
 
 PDF_PAGE_WIDTH = 1500
@@ -24,7 +18,7 @@ DEFAULT_WIDTH_NUMBER = 55
 COLUMN_WIDTHS = [DEFAULT_WIDTH_TEXT, DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_NUMBER,
                  DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_NUMBER,
                  DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_NUMBER, DEFAULT_WIDTH_TEXT_ERROR]
-COLUMN_NAMES = [["Name"], ["OK cnt"], ["Min"], ["Avg"], ["p50%"],
+COLUMN_NAMES = [[u"Name"], ["OK cnt"], ["Min"], ["Avg"], ["p50%"],
                 ["p80%"], ["p90%"], ["p95%"], ["p99%"], ["HPS"],
                 ["Err cnt"], ["Err %"], ["(Error count) Error text"]]
 

@@ -4,6 +4,12 @@ __pycache__/
 *$py.class
 .idea/
 
+# repjtl files
+*.jtl
+*.pdf
+*.xlsx
+*.png
+
 # C extensions
 *.so
 
