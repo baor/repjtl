@@ -21,7 +21,7 @@ RGB_COLORS = ["#FF0000", "#FF8000", "#FFFF00", "#80FF00", "#00FF00", "#00FF80", 
 
 
 def get_unique_ts_and_count(ts_not_unique):
-    ts_not_unique = map(lambda x: int(x)/1000, ts_not_unique)
+    ts_not_unique = [int(x)/1000 for x in ts_not_unique]
     return np.unique(ts_not_unique, return_index=True, return_counts=True)
 
 
@@ -38,20 +38,20 @@ def get_average_values_from_notunique(ts_unique_arr, not_unique_arr, counts_arr,
 
 def parse_labels_for_plot(group_names):
     dict_groups = {}
-    for tn, touple_arr in group_names.iteritems():
-        print "Parse thread groups %s for plot" % tn
+    for tn, touple_arr in group_names.items():
+        print("Parse thread groups %s for plot" % tn)
         ts_ng_np = np.asarray(touple_arr)
 
         ts_not_unique = sorted(ts_ng_np[:, 0])
         ts_unique_arr, index_arr, counts_arr = get_unique_ts_and_count(ts_not_unique)
 
         ng_count_not_unique = ts_ng_np[:, 1]
-        ng_count_not_unique = map(int, ng_count_not_unique)
+        ng_count_not_unique = list(map(int, ng_count_not_unique))
 
         arr_with_avg_ng_count = get_average_values_from_notunique(ts_unique_arr, ng_count_not_unique, counts_arr, index_arr)
 
         # zip arrays
-        dict_groups[tn] = zip(ts_unique_arr, arr_with_avg_ng_count)
+        dict_groups[tn] = list(zip(ts_unique_arr, arr_with_avg_ng_count))
     return dict_groups
 
 
@@ -94,8 +94,8 @@ def generate_graphs_for_labels_and_threads(labels, group_names, fig_count_start=
 
     dict_groups = parse_labels_for_plot(group_names)
 
-    for label, touple_arr in labels.iteritems():
-        print "Parse label %s for plot" % label
+    for label, touple_arr in labels.items():
+        print("Parse label %s for plot" % label)
         array_of_values = []
         array_of_errors = []
         for ts, s, value in touple_arr:
@@ -108,7 +108,7 @@ def generate_graphs_for_labels_and_threads(labels, group_names, fig_count_start=
 
         array_of_values = np.asarray(sorted(array_of_values, key=lambda x: x[0]))
         ts_not_unique = array_of_values[:, 0]
-        values_not_unique = map(float, array_of_values[:, 1])
+        values_not_unique = list(map(float, array_of_values[:, 1]))
 
         ts_unique_arr, index_arr, counts_arr = get_unique_ts_and_count(ts_not_unique)
 
@@ -148,11 +148,11 @@ def generate_graphs_for_labels_and_threads(labels, group_names, fig_count_start=
                                                    axes=subplot4,
                                                    offset=(-new_fixed_axis_offset, 0))
 
-        for tn in group_names.iterkeys():
-            ts_arr, threads_arr = zip(*dict_groups[tn])
+        for tn in group_names.keys():
+            ts_arr, threads_arr = list(zip(*dict_groups[tn]))
             ts_arr, threads_arr = scale_to_count_of_points(ts_arr, threads_arr)
 
-            ts_arr = map(lambda x: (datetime.datetime.fromtimestamp(x)), ts_arr)
+            ts_arr = [(datetime.datetime.fromtimestamp(x)) for x in ts_arr]
 
             subplot1.plot(ts_arr, threads_arr, '--', label=tn, color=color_converter.to_rgb(RGB_COLORS[i_color]))
             i_color = (i_color + 1) % len(RGB_COLORS)
@@ -160,8 +160,8 @@ def generate_graphs_for_labels_and_threads(labels, group_names, fig_count_start=
         ts_counts_arr, counts_arr = scale_to_count_of_points(ts_unique_arr, counts_arr)
         ts_response_arr, response_time_array = scale_to_count_of_points(ts_unique_arr, response_time_array)
 
-        ts_counts_arr = map(lambda x: (datetime.datetime.fromtimestamp(x)), ts_counts_arr)
-        ts_response_arr = map(lambda x: (datetime.datetime.fromtimestamp(x)), ts_response_arr)
+        ts_counts_arr = [(datetime.datetime.fromtimestamp(x)) for x in ts_counts_arr]
+        ts_response_arr = [(datetime.datetime.fromtimestamp(x)) for x in ts_response_arr]
 
         subplot2.plot(ts_counts_arr, counts_arr, 'g.-', label='tps')
         subplot3.plot(ts_response_arr, response_time_array, 'b.-', label='Response')
@@ -169,7 +169,7 @@ def generate_graphs_for_labels_and_threads(labels, group_names, fig_count_start=
         if len(ts_err_unique_arr) != 0:
             ts_err_unique_arr, tps_err_array = scale_to_count_of_points(ts_err_unique_arr, tps_err_array)
 
-            ts_err_unique_arr = map(lambda x: (datetime.datetime.fromtimestamp(x)), ts_err_unique_arr)
+            ts_err_unique_arr = [(datetime.datetime.fromtimestamp(x)) for x in ts_err_unique_arr]
             subplot4.plot(ts_err_unique_arr, tps_err_array, 'r.-', label='Errors')
 
         subplot1.xaxis.set_major_formatter(DateFormatter("%H:%M:%S"))
@@ -193,13 +193,13 @@ def generate_graphs_for_labels_and_threads(labels, group_names, fig_count_start=
         pyplot.subplots_adjust(right=0.75)
         pyplot.tight_layout()
 
-        print "Save fig %s.png" % fig_count
+        print("Save fig %s.png" % fig_count)
         figure.savefig("%s.png" % fig_count, format="png")
 
         pyplot.close(figure)
 
         fig_count += 1
-    print "plot graphs for labels end"
+    print("plot graphs for labels end")
     return fig_count
 
 
@@ -207,10 +207,10 @@ def generate_graphs_for_labels(labels, fig_count_start=0):
     matplotlib.rc('font', family='DejaVu Sans')
     fig_count = fig_count_start
 
-    for label, touple_arr in labels.iteritems():
+    for label, touple_arr in labels.items():
         fig, (subplot01, subplot02) = pyplot.subplots(nrows=2, ncols=1)
         #label = re.sub(re.compile("[\"\'\r\n\t]+", re.UNICODE | re.MULTILINE), "", label)
-        print "Parse label %s for plot" % label
+        print("Parse label %s for plot" % label)
         array_of_values = []
         array_of_errors = []
         for ts, s, value in touple_arr:
@@ -225,16 +225,16 @@ def generate_graphs_for_labels(labels, fig_count_start=0):
         array_of_values = np.array(array_of_values)
 
         ts_not_unique = array_of_values[:, 0]
-        ts_not_unique = map(int, ts_not_unique)
+        ts_not_unique = list(map(int, ts_not_unique))
 
         values_not_unique = array_of_values[:, 2]
-        values_not_unique = map(float, values_not_unique)
+        values_not_unique = list(map(float, values_not_unique))
 
         ts_unique_counter = collections.Counter(ts_not_unique)
         tps_array = []
         response_time_array = []
 
-        for ts, count in ts_unique_counter.iteritems():
+        for ts, count in ts_unique_counter.items():
             tps_array += [[datetime.datetime.fromtimestamp(ts), count]]
 
             values_for_avg = [values_not_unique[i] for i, x in enumerate(ts_not_unique) if x == ts]
@@ -245,7 +245,7 @@ def generate_graphs_for_labels(labels, fig_count_start=0):
 
         ts_errors_unique_counter = collections.Counter(array_of_errors)
         tps_errors = []
-        for ts, count in ts_errors_unique_counter.iteritems():
+        for ts, count in ts_errors_unique_counter.items():
             tps_errors += [[datetime.datetime.fromtimestamp(ts), count]]
 
         tps_errors = np.array(sorted(tps_errors, key=lambda x: x[0]))
@@ -267,13 +267,13 @@ def generate_graphs_for_labels(labels, fig_count_start=0):
         fig.set_size_inches(14, 5)
         pyplot.tight_layout()
 
-        print "Save fig %s.png" % fig_count
+        print("Save fig %s.png" % fig_count)
         fig.savefig("%s.png" % fig_count, format="png")
 
         pyplot.close(fig)
 
         fig_count += 1
-    print "plot graphs for labels end"
+    print("plot graphs for labels end")
     return fig_count
 
 
@@ -292,11 +292,11 @@ def generate_graphs_for_threads(group_names, fig_count_start=0):
     i_color = 0
 
     dict_groups = parse_labels_for_plot(group_names)
-    for tn in group_names.iterkeys():
-        ts_arr, threads_arr = zip(*dict_groups[tn])
+    for tn in group_names.keys():
+        ts_arr, threads_arr = list(zip(*dict_groups[tn]))
         ts_arr, threads_arr = scale_to_count_of_points(ts_arr, threads_arr)
 
-        ts_arr = map(lambda x: (datetime.datetime.fromtimestamp(x)), ts_arr)
+        ts_arr = [(datetime.datetime.fromtimestamp(x)) for x in ts_arr]
 
         ax.xaxis.set_major_formatter(DateFormatter("%H:%M:%S"))
         ax.plot(ts_arr, threads_arr, '.-', label=tn, color=color_converter.to_rgb(RGB_COLORS[i_color]))
@@ -315,10 +315,10 @@ def generate_graphs_for_threads(group_names, fig_count_start=0):
     fig.set_size_inches(14, 10)
     pyplot.tight_layout()
 
-    print "Save fig %s.png" % fig_count
+    print("Save fig %s.png" % fig_count)
     fig.savefig("%s.png" % fig_count, format="png", bbox_extra_artists=(lgd,), bbox_inches='tight')
     pyplot.close(fig)
 
     fig_count += 1
-    print "plot graphs for threads end"
+    print("plot graphs for threads end")
     return fig_count

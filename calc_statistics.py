@@ -3,7 +3,7 @@ import numpy as np
 def calculate_values_to_table_and_errors(labels):
 
     table = {}
-    for label, touple_arr in labels.iteritems():
+    for label, touple_arr in labels.items():
         t_arr = []
         ts_arr = []
         errors = {}
@@ -55,7 +55,7 @@ def calculate_values_to_table_and_errors(labels):
 
 
 def percent_diff_time(value_new, value_base):
-    if isinstance(value_base, basestring):
+    if isinstance(value_base, str):
         if value_base == "nan":
             return "nan"
         return str(value_new) + value_base

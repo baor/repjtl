@@ -19,17 +19,17 @@ COLUMN_NAMES = ["Name", "OK cnt", "Min", "Avg", "p50%",
 
 
 def compate_tables_to_table(table_new, table_base):
-    print "Compare tables"
+    print("Compare tables")
     table = {}
-    for label, values_base in sorted(table_base.iteritems()):
-        print "Compare for label %s" % unicode(label).encode("UTF-8")
+    for label, values_base in sorted(table_base.items()):
+        print("Compare for label %s" % str(label).encode("UTF-8"))
 
         line = [[0], [0], [0], [0], [0],
                 [0], [0], [0], [0], [0],
                 [0]]
 
         if label in table_new:
-            line = map(calc_statistics.percent_diff_time, table_new[label], values_base)
+            line = list(map(calc_statistics.percent_diff_time, table_new[label], values_base))
             line[0][0] = -line[0][0] #samples count diff
             if line[0][1] != "nan":
                 line[0][1] = -line[0][1] #samples count percent diff
@@ -70,8 +70,8 @@ def print_result_to_xlsx_1_file(table, errors, filename, count_of_png=0):
     row += 1
     col = 0
 
-    for part in table.iteritems():
-        sample_name = eval(u'part[0]')
+    for part in table.items():
+        sample_name = eval('part[0]')
         error_count = part[1][-1]
         stat_sheet.write(row, col, sample_name)
         for el_in_list in part[1]:
@@ -79,8 +79,8 @@ def print_result_to_xlsx_1_file(table, errors, filename, count_of_png=0):
             stat_sheet.write(row, col, el_in_list)
         if error_count != 0.0:
             col += 1
-            for label, error_list in errors.iteritems():
-                if sample_name == eval(u'label'):
+            for label, error_list in errors.items():
+                if sample_name == eval('label'):
                     generated_err_list = generate_list_of_errors(error_list)
                     #print 'generated for label: ' + eval(u'sample_name') + ' ' + str(generate_list_of_errors(error_list))
                     for err in generated_err_list:
@@ -90,7 +90,7 @@ def print_result_to_xlsx_1_file(table, errors, filename, count_of_png=0):
     graphs_sheet = wb.add_worksheet('Graphs')
     make_graphs_style(graphs_sheet)
     insert_img_to_sheet(graphs_sheet, count_of_png)
-    print 'output xlsx file: ' + os.path.basename(filename).replace(".", "_") + '_' + dt + '.xlsx'
+    print('output xlsx file: ' + os.path.basename(filename).replace(".", "_") + '_' + dt + '.xlsx')
     wb.close()
 
 
@@ -106,8 +106,8 @@ def print_result_to_xlsx_2_file(table, errors, filename, table_new, errors_new, 
     row += 1
     col = 0
 
-    for part in table.iteritems():
-        sample_name = eval(u'part[0]')
+    for part in table.items():
+        sample_name = eval('part[0]')
         error_count = part[1][-1]
         stat_sheet.write(row, col, sample_name)
         for el_in_list in part[1]:
@@ -115,8 +115,8 @@ def print_result_to_xlsx_2_file(table, errors, filename, table_new, errors_new, 
             stat_sheet.write(row, col, el_in_list)
         if error_count != 0.0:
             col += 1
-            for label, error_list in errors.iteritems():
-                if sample_name == eval(u'label'):
+            for label, error_list in errors.items():
+                if sample_name == eval('label'):
                     generated_err_list = generate_list_of_errors(error_list)
                     #print 'generated for label: ' + eval(u'sample_name') + ' ' + str(generate_list_of_errors(error_list))
                     for err in generated_err_list:
@@ -134,8 +134,8 @@ def print_result_to_xlsx_2_file(table, errors, filename, table_new, errors_new, 
     row += 1
     col = 0
 
-    for part in table_new.iteritems():
-        sample_name = eval(u'part[0]')
+    for part in table_new.items():
+        sample_name = eval('part[0]')
         error_count = part[1][-1]
         stat_sheet2.write(row, col, sample_name)
         for el_in_list in part[1]:
@@ -143,8 +143,8 @@ def print_result_to_xlsx_2_file(table, errors, filename, table_new, errors_new, 
             stat_sheet2.write(row, col, el_in_list)
         if error_count != 0.0:
             col += 1
-            for label, error_list in errors_new.iteritems():
-                if sample_name == eval(u'label'):
+            for label, error_list in errors_new.items():
+                if sample_name == eval('label'):
                     generated_err_list = generate_list_of_errors(error_list)
                     #print 'generated for label: ' + eval(u'sample_name') + ' ' + str(generate_list_of_errors(error_list))
                     for err in generated_err_list:
@@ -162,9 +162,9 @@ def print_result_to_xlsx_2_file(table, errors, filename, table_new, errors_new, 
     row += 1
     col = 0
 
-    for part in table_compare.iteritems():
+    for part in table_compare.items():
         # print 'Compare -->> ' + str(part)
-        sample_name = eval(u'part[0]')
+        sample_name = eval('part[0]')
         error_count = part[1][-1]
         stat_sheet3.write(row, col, sample_name)
         for el_in_list in part[1]:
@@ -179,15 +179,15 @@ def print_result_to_xlsx_2_file(table, errors, filename, table_new, errors_new, 
             stat_sheet3.write(row, col, '(' + diff + ') ' + diff_percents + '%')
         if error_count != 0.0:
             col += 1
-            for label, error_list in errors_compare.iteritems():
-                if sample_name == eval(u'label'):
+            for label, error_list in errors_compare.items():
+                if sample_name == eval('label'):
                     generated_err_list = generate_list_of_errors(error_list)
                     #print 'generated for label: ' + eval(u'sample_name') + ' ' + str(generate_list_of_errors(error_list))
                     for err in generated_err_list:
                         stat_sheet3.write(row, col, str(err))
         row += 1
         col = 0
-    print 'output xlsx file: ' + os.path.basename(filename).replace(".", "_") + '_VS_' + os.path.basename(filename_new).replace(".", "_") + '_' + dt + '.xlsx'
+    print('output xlsx file: ' + os.path.basename(filename).replace(".", "_") + '_VS_' + os.path.basename(filename_new).replace(".", "_") + '_' + dt + '.xlsx')
     wb.close()
 
 
@@ -205,9 +205,9 @@ def print_result_to_xlsx_1_file_and_zabbix(table_file, errors_file, filename,
     row += 1
     col = 0
 
-    for part in table_file.iteritems():
+    for part in table_file.items():
         # print part
-        sample_name = eval(u'part[0]')
+        sample_name = eval('part[0]')
         error_count = part[1][-1]
         stat_sheet.write(row, col, sample_name)
         for el_in_list in part[1]:
@@ -215,8 +215,8 @@ def print_result_to_xlsx_1_file_and_zabbix(table_file, errors_file, filename,
             stat_sheet.write(row, col, el_in_list)
         if error_count != 0.0:
             col += 1
-            for label, error_list in errors_file.iteritems():
-                if sample_name == eval(u'label'):
+            for label, error_list in errors_file.items():
+                if sample_name == eval('label'):
                     generated_err_list = generate_list_of_errors(error_list)
                     #print 'generated for label: ' + eval(u'sample_name') + ' ' + str(generate_list_of_errors(error_list))
                     for err in generated_err_list:
@@ -234,8 +234,8 @@ def print_result_to_xlsx_1_file_and_zabbix(table_file, errors_file, filename,
     row += 1
     col = 0
 
-    for part in table_base_zabbix.iteritems():
-        sample_name = eval(u'part[0]')
+    for part in table_base_zabbix.items():
+        sample_name = eval('part[0]')
         error_count = part[1][-1]
         stat_sheet2.write(row, col, sample_name)
         for el_in_list in part[1]:
@@ -243,8 +243,8 @@ def print_result_to_xlsx_1_file_and_zabbix(table_file, errors_file, filename,
             stat_sheet2.write(row, col, el_in_list)
         if error_count != 0.0:
             col += 1
-            for label, error_list in errors_file.iteritems():
-                if sample_name == eval(u'label'):
+            for label, error_list in errors_file.items():
+                if sample_name == eval('label'):
                     generated_err_list = generate_list_of_errors(error_list)
                     #print 'generated for label: ' + eval(u'sample_name') + ' ' + str(generate_list_of_errors(error_list))
                     for err in generated_err_list:
@@ -262,9 +262,9 @@ def print_result_to_xlsx_1_file_and_zabbix(table_file, errors_file, filename,
     row += 1
     col = 0
 
-    for part in table_compare.iteritems():
+    for part in table_compare.items():
         # print 'Compare -->> ' + str(part)
-        sample_name = eval(u'part[0]')
+        sample_name = eval('part[0]')
         error_count = part[1][-1]
         stat_sheet3.write(row, col, sample_name)
         for el_in_list in part[1]:
@@ -276,10 +276,10 @@ def print_result_to_xlsx_1_file_and_zabbix(table_file, errors_file, filename,
             stat_sheet3.write(row, col, '(' + diff + ') ' + diff_percents + '%')
         if error_count != 0.0:
             col += 1
-            for label, error_list in errors_file.iteritems():
-                if sample_name == eval(u'label'):
+            for label, error_list in errors_file.items():
+                if sample_name == eval('label'):
                     generated_err_list = generate_list_of_errors(error_list)
-                    print 'generated for label: ' + eval(u'sample_name') + ' ' + str(generate_list_of_errors(error_list))
+                    print('generated for label: ' + eval('sample_name') + ' ' + str(generate_list_of_errors(error_list)))
                     for err in generated_err_list:
                         stat_sheet3.write(row, col, str(err))
         row += 1
@@ -287,7 +287,7 @@ def print_result_to_xlsx_1_file_and_zabbix(table_file, errors_file, filename,
     graphs_sheet = wb.add_worksheet('Graphs new')
     make_graphs_style(graphs_sheet)
     insert_img_to_sheet(graphs_sheet, count_of_png)
-    print 'output xlsx file: ' + os.path.basename(filename).replace(".", "_") + '_zabbix_7days' + '_' + dt + '.xlsx'
+    print('output xlsx file: ' + os.path.basename(filename).replace(".", "_") + '_zabbix_7days' + '_' + dt + '.xlsx')
     wb.close()
 
 
@@ -297,7 +297,7 @@ def make_document_header_style(workbook, worksheet):
     bold.set_color('white')
     bold.set_border()
     bold.set_bg_color('black')
-    for col in xrange(0, len(COLUMN_NAMES)):
+    for col in range(0, len(COLUMN_NAMES)):
         worksheet.set_column(col, col, 12)
     worksheet.set_column(0, 0, 50)
     return bold

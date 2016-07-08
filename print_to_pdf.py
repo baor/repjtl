@@ -3,11 +3,12 @@
 import datetime
 import os
 import sys
+from wfpdf.wfpdf import WFPDF
 
 SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
 PATH_TO_WFPDF = SCRIPT_PATH + "/../wfpdf"
 sys.path.append(PATH_TO_WFPDF)
-from wfpdf import WFPDF
+
 
 REPORTNAME = "rep_%s_%s.%s"
 
@@ -52,8 +53,8 @@ def surround_notlist_with_brakets(value):
 
 def print_result_to_pdf(table, errors):
 
-    for label, values in sorted(table.iteritems()):
-        values = map(surround_notlist_with_brakets, values)
+    for label, values in sorted(table.items()):
+        values = list(map(surround_notlist_with_brakets, values))
         line = [[label]] + values
         if label in errors:
             line += generate_list_of_errors(errors[label])
@@ -61,7 +62,7 @@ def print_result_to_pdf(table, errors):
             line += [[" "]]
         wfpdf.write_line(line, DEFAULT_HEIGHT, COLUMN_WIDTHS)
 
-    for label, values in errors.iteritems():
+    for label, values in errors.items():
         if label in table:
             continue
         line = [[label], [0], [0], [0], [0],

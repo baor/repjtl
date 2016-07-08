@@ -53,17 +53,17 @@ REPORTNAME = "rep_" + str(datetime.datetime.now().strftime('%Y%m%d_%H%M%S'))
 
 def compate_tables_to_table(table_new, table_base):
 
-    print "Compare tables"
+    print("Compare tables")
     table = {}
-    for label, values_base in sorted(table_base.iteritems()):
-        print "Compare for label %s" % unicode(label).encode("UTF-8")
+    for label, values_base in sorted(table_base.items()):
+        print("Compare for label %s" % str(label).encode("UTF-8"))
 
         line = [[0], [0], [0], [0], [0],
                 [0], [0], [0], [0], [0],
                 [0]]
 
         if label in table_new:
-            line = map(calc_statistics.percent_diff_time, table_new[label], values_base)
+            line = list(map(calc_statistics.percent_diff_time, table_new[label], values_base))
             line[0][0] = -line[0][0] #samples count diff
             if line[0][1] != "nan":
                 line[0][1] = -line[0][1] #samples count percent diff
@@ -72,7 +72,7 @@ def compate_tables_to_table(table_new, table_base):
             if line[8][1] != "nan":
                 line[8][1] = -line[8][1] #hps percent diff
 
-            line = map(print_to_pdf.map_color_for_cell, line)
+            line = list(map(print_to_pdf.map_color_for_cell, line))
         table[label] = line
     return table
 
@@ -115,4 +115,4 @@ if __name__ == '__main__':
                                                  table_base, parse_jtl.get_errors_from_labels(labels_base), args.files[1],
                                                  table_compare_xls, parse_jtl.get_errors_from_labels(labels_new))
     else:
-        print "Args error!"
+        print("Args error!")

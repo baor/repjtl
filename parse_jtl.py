@@ -111,7 +111,7 @@ def parse_tree_into_labels_and_threads_dict(tree, transactions_only=False):
 
 def get_errors_from_labels(labels):
     errors = {}
-    for label, touple_arr in labels.iteritems():
+    for label, touple_arr in labels.items():
         for ts, s, value in touple_arr:
             if s != "true":
                 if label not in errors:
